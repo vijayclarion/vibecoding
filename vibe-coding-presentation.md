@@ -1,6 +1,6 @@
-# 🎯 Vibe Coding for Developers
+# 🎯 Vibe Coding & Spec-Driven Development for Developers
 
-> *A practical guide for .NET and Python developers to harness AI-assisted development*
+> *A practical 2026 guide for .NET and Python developers to harness AI-assisted development with discipline*
 
 ---
 
@@ -11,15 +11,19 @@
 3. [The Vibe Coding Mindset](#3-the-vibe-coding-mindset)
 4. [Tools & Frameworks](#4-tools--frameworks)
 5. [Structured Vibe Coding: Context Is King](#5-structured-vibe-coding-context-is-king)
-6. [The Vibe Coding Workflow](#6-the-vibe-coding-workflow)
-7. [.NET Use Cases](#7-net-use-cases)
-8. [Python Use Cases](#8-python-use-cases)
-9. [Prompt Engineering Playbook](#9-prompt-engineering-playbook)
-10. [Pattern Drift & Context Collapse](#10-pattern-drift--context-collapse)
-11. [Anti-Patterns to Avoid](#11-anti-patterns-to-avoid)
-12. [Best Practices & Governance](#12-best-practices--governance)
-13. [Hands-On Demo Script](#13-hands-on-demo-script)
-14. [Key Takeaways](#14-key-takeaways)
+6. [Spec-Driven Vibe Coding (SDD)](#6-spec-driven-vibe-coding-sdd)
+7. [The SDD Workflow: Greenfield & Legacy](#7-the-sdd-workflow-greenfield--legacy)
+8. [Building the Constitution: Mission, Tech-Stack, Roadmap](#8-building-the-constitution-mission-tech-stack-roadmap)
+9. [Feature Specification Workflow](#9-feature-specification-workflow)
+10. [The Vibe Coding Workflow](#10-the-vibe-coding-workflow)
+11. [.NET Use Cases](#11-net-use-cases)
+12. [Python Use Cases](#12-python-use-cases)
+13. [Prompt Engineering Playbook](#13-prompt-engineering-playbook)
+14. [Pattern Drift & Context Collapse](#14-pattern-drift--context-collapse)
+15. [Anti-Patterns to Avoid](#15-anti-patterns-to-avoid)
+16. [Best Practices & Governance](#16-best-practices--governance)
+17. [Hands-On Demo Script](#17-hands-on-demo-script)
+18. [Key Takeaways](#18-key-takeaways)
 
 ---
 
@@ -276,7 +280,509 @@ When an agent encounters a bug, instruct it to: **record the fix in `LessonsLear
 
 ---
 
-## 6. The Vibe Coding Workflow
+## 6. Spec-Driven Vibe Coding (SDD)
+
+> *"Specifications don't serve code — code serves specifications. The spec isn't a guide for implementation; it's the source that generates implementation."* — GitHub Spec Kit
+
+**Spec-Driven Development (SDD)** is the natural evolution of structured vibe coding. Instead of prompting ad-hoc, you write **living, executable specifications** that become the source of truth for both humans and AI agents. The AI doesn't just generate code — it generates **artifacts** (specs, plans, tasks) that you review and refine before a single line of code is written.
+
+### 🎯 Why SDD Fixes Vibe Coding's Biggest Problems
+
+| Problem | How SDD Fixes It |
+|---|---|
+| **Pattern drift** | Constitution enforces non-negotiable principles on every change |
+| **Context collapse** | Specs live in files, not the chat window — reload them anytime |
+| **"Looks right but doesn't work"** | Plan & tasks are reviewed before implementation starts |
+| **Scattered requirements** | Security, compliance, and design rules live in one versioned place |
+| **Agent hallucinations** | The agent reads your specs, not guesses |
+| **Team misalignment** | Specs are the shared language between PMs, devs, and AI |
+
+### 📂 The SDD Artifact Hierarchy
+
+```
+your-project/
+├── .specify/ or specs/             ← SDD's "brain"
+│   ├── constitution.md             ← immutable principles (the "why")
+│   ├── mission.md                  ← what we're building + for whom
+│   ├── tech-stack.md               ← how we're building it
+│   ├── roadmap.md                  ← phased plan of features
+│   └── features/
+│       └── 001-user-auth/
+│           ├── spec.md             ← feature intent + acceptance criteria
+│           ├── plan.md             ← technical approach
+│           ├── tasks.md            ← atomic, ordered implementation steps
+│           └── validation.md       ← how we'll verify it works
+├── src/                            ← the actual code (last-mile)
+└── CLAUDE.md / AGENTS.md           ← agent entry point, points at specs/
+```
+
+### 🛠️ Two SDD Implementations Worth Knowing
+
+**1. GitHub Spec Kit** (the most widely adopted standard)
+
+Install via:
+```bash
+uvx --from git+https://github.com/github/spec-kit.git specify init <PROJECT_NAME>
+```
+
+Workflow uses slash commands in your AI agent:
+```
+/speckit.constitution  → establish principles
+/speckit.specify       → define what to build
+/speckit.clarify       → resolve [NEEDS CLARIFICATION] items
+/speckit.plan          → technical plan (architecture, deps)
+/speckit.tasks         → break plan into atomic tasks
+/speckit.analyze       → validate consistency between artifacts
+/speckit.implement     → hand off to agent for execution
+```
+
+Works with GitHub Copilot, Claude Code, Gemini CLI, Cursor, Windsurf.
+
+**2. DeepLearning.AI / JetBrains Workflow** (lighter, conversational)
+
+Uses a three-file **Constitution** (`mission.md` + `tech-stack.md` + `roadmap.md`) driven by conversation with the agent. Works with any AI coding tool — no CLI required.
+
+---
+
+## 7. The SDD Workflow: Greenfield & Legacy
+
+### 🌱 Greenfield Project (New from Scratch)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. CONSTITUTION  →  mission.md + tech-stack.md + roadmap.md│
+│  2. PICK FEATURE  →  next item from roadmap phase 1         │
+│  3. SPECIFY       →  spec.md (what) + plan.md (how)         │
+│  4. CLARIFY       →  resolve ambiguities with the agent     │
+│  5. TASKS         →  break plan into atomic steps           │
+│  6. IMPLEMENT     →  agent executes; you review per task    │
+│  7. VALIDATE      →  run validation.md checks               │
+│  8. COMMIT & MERGE                                          │
+│  9. REPLAN        →  update roadmap, return to step 2       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 🏚️ Legacy / Brownfield Project (Existing Codebase)
+
+The exact same workflow — but the agent **reverse-engineers** the constitution from what's already there.
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. REVERSE-ENGINEER CONSTITUTION                           │
+│     - Point agent at README.md, TODO.md, codebase, issues   │
+│     - Agent explores code, commits, configs                 │
+│     - Agent proposes mission / tech-stack / roadmap         │
+│     - You clarify, correct, commit                          │
+│  2. From here: SAME as greenfield (steps 2-9 above)         │
+└─────────────────────────────────────────────────────────────┘
+```
+
+**Key insight:** Your existing issue tracker, README, TODOs, and even commit history become *inputs* the agent uses to draft the constitution. You don't start from zero — you formalize what's already implicit.
+
+### ✅ The Human-in-the-Loop Checkpoints
+
+SDD builds in **four explicit review gates** where you critique before proceeding:
+
+| Gate | You verify |
+|---|---|
+| After **Constitution** | Mission, stack, and roadmap match your intent |
+| After **Specify** | The feature description captures what you actually want |
+| After **Plan** | Technical approach respects constraints, no major gaps |
+| After **Tasks** | Breakdown is atomic enough, ordering is correct |
+
+**Skip these at your peril** — each checkpoint prevents downstream rework that costs 10×.
+
+---
+
+## 8. Building the Constitution: Mission, Tech-Stack, Roadmap
+
+The Constitution is your project's **source of truth**, captured in three files. Let's build each from scratch.
+
+### 📜 8.1 The Seed Prompt (Kickoff Conversation)
+
+Whether you're using Spec Kit or the lightweight approach, you start with a conversation. Here's the canonical kickoff prompt:
+
+```
+I want to build a new project. Act as a senior architect and help me write
+its Constitution — three files: mission.md, tech-stack.md, and roadmap.md.
+
+Project description:
+<paste 1-3 paragraphs describing what you want to build>
+
+Stakeholder inputs (optional):
+<paste any existing README, pitch deck, PRD, or notes>
+
+Please:
+1. Ask me clarifying questions ONE AT A TIME about:
+   - target audience & success metrics
+   - architectural trade-offs (speed vs fidelity, cost vs features)
+   - tech stack preferences & constraints
+   - feature priorities for an MVP
+2. Organize the roadmap in small phases (2-4 features per phase)
+3. After our conversation, create the three files in /specs/
+4. Flag any assumptions with [ASSUMPTION] so I can verify them
+```
+
+### 📄 8.2 `mission.md` — What & Why (NO Tech Details)
+
+**Purpose:** High-level product intent. A new team member should understand *what* you're building and *for whom* in 5 minutes.
+
+**Template:**
+```markdown
+# Mission: <Project Name>
+
+## The Problem
+<One paragraph. Who has the pain? What does it cost them today?>
+
+## Our Solution
+<One paragraph. What does the product do at a high level?>
+
+## Target Audience
+- Primary: <persona>, <use case>
+- Secondary: <persona>, <use case>
+
+## Core Principles
+- <principle #1 — e.g., "Privacy by default">
+- <principle #2 — e.g., "Works offline-first">
+- <principle #3 — e.g., "10-second onboarding">
+
+## Success Metrics
+- <metric> — e.g., "User completes first task within 60 seconds"
+- <metric> — e.g., "P95 latency < 200ms"
+
+## Non-Goals
+<What we explicitly will NOT do. This is as important as what we will.>
+- e.g., "We are not building a general-purpose CRM."
+- e.g., "No self-hosted option in v1."
+
+## Glossary
+- **Term** — definition (so the agent uses your vocabulary consistently)
+```
+
+**How to build it from raw inputs:**
+1. Paste your raw idea + any existing docs into the chat.
+2. Use the seed prompt above.
+3. When the agent asks about tone, audience, or non-goals — **answer every question**.
+4. Review the draft. Missing audience? Missing non-goals? Ask the agent to edit (don't edit manually — keeps artifacts in sync).
+5. Commit to Git.
+
+---
+
+### 🔧 8.3 `tech-stack.md` — How We Build It
+
+**Purpose:** Key architecture decisions separated from product intent. Same product can be built many ways — this locks in your choices.
+
+**Template:**
+```markdown
+# Tech Stack: <Project Name>
+
+## Languages & Runtimes
+- Backend: <.NET 8 / Python 3.12 / Node 20>
+- Frontend: <React 18 + TypeScript / Blazor / HTMX>
+- Database: <PostgreSQL 16 / SQLite / SQL Server>
+
+## Key Frameworks & Libraries
+- <Framework + version + why chosen>
+- e.g., "ASP.NET Core Minimal APIs — faster cold starts than MVC for our use case"
+- e.g., "FastAPI — native async, auto OpenAPI, team familiarity"
+
+## Architecture
+- Pattern: <Monolith / Modular monolith / Microservices>
+- Boundaries: <list bounded contexts / modules>
+- Communication: <REST / gRPC / events>
+- Deployment target: <Azure App Service / AWS ECS / K8s / serverless>
+
+## Data Model (High-Level)
+<Sketch of main entities & relationships — the agent will elaborate later>
+
+## Request Lifecycle
+<For a key endpoint, trace the full pipeline: validation → auth → service → repo → DB>
+
+## Cross-Cutting Concerns
+- **Authentication:** <JWT / OAuth2 / API keys>
+- **Authorization:** <role-based / policy-based>
+- **Logging:** <Serilog → Seq / structlog → Loki>
+- **Observability:** <OpenTelemetry + Jaeger>
+- **Error handling:** <ProblemDetails / Problem+JSON>
+- **Configuration:** <env vars + dotnet user-secrets / Pydantic Settings>
+- **Secrets:** <Azure Key Vault / AWS Secrets Manager>
+
+## Testing Strategy
+- Unit: <framework, coverage target>
+- Integration: <WebApplicationFactory / httpx.AsyncClient>
+- E2E: <Playwright / Selenium>
+
+## Quality Gates
+- Linter: <dotnet format / ruff>
+- Type checker: <Roslyn analyzers / mypy --strict>
+- Security: <Snyk / dotnet list package --vulnerable>
+
+## Constraints & Non-Functional Requirements
+- Performance: P95 < <X>ms
+- Availability: <99.9% / best-effort>
+- Compliance: <SOC 2 / GDPR / none>
+- Browser support: <latest 2 Chrome, Firefox, Safari>
+
+## Open Questions / Pending Decisions
+- [ ] <unresolved item>
+```
+
+**How to build it from raw inputs:**
+1. After `mission.md` is committed, ask the agent:
+   ```
+   Now let's write tech-stack.md. Based on our mission and these constraints:
+   - <team experience: "5 devs, all TypeScript + Python">
+   - <existing infra: "Azure tenant, prefer managed PG">
+   - <non-functional: "must handle 10k RPS eventually">
+   Ask me the key architectural questions one at a time, then draft tech-stack.md.
+   ```
+2. Expect questions like: *"Speed vs data fidelity for reads?" "Strong vs eventual consistency across services?" "Config flags vs env vars for the LLM provider?"*
+3. For anything you're unsure about, answer with "leave configurable" or "[DEFERRED]" — you can decide later.
+4. Commit.
+
+---
+
+### 🗺️ 8.4 `roadmap.md` — Phased Feature Plan
+
+**Purpose:** The sequence of features that turns mission → MVP → v1.0. Organized in **small phases** so the agent ships in digestible chunks.
+
+**Template:**
+```markdown
+# Roadmap: <Project Name>
+
+## Phase 0 — Foundation
+- [ ] F0.1 — Project skeleton (repo, CI/CD, healthcheck endpoint)
+- [ ] F0.2 — Database schema + migrations setup
+- [ ] F0.3 — Logging + observability baseline
+
+## Phase 1 — MVP Core (the walking skeleton)
+- [ ] F1.1 — <smallest feature that proves the value prop end-to-end>
+- [ ] F1.2 — <next>
+- [ ] F1.3 — <next>
+**Exit criteria:** <what "done" looks like for Phase 1>
+
+## Phase 2 — MVP Polish
+- [ ] F2.1 — Auth
+- [ ] F2.2 — Dashboard
+**Exit criteria:** <...>
+
+## Phase 3 — v1.0 (shippable)
+...
+
+## Deferred / Parking Lot
+- <features we discussed but won't build soon — with reason>
+```
+
+**How to build it from raw inputs:**
+1. With `mission.md` and `tech-stack.md` committed, prompt:
+   ```
+   Now let's write roadmap.md. Break our mission into 3-4 phases.
+   - Phase 1 should be the thinnest end-to-end slice that proves core value.
+   - Each feature should be implementable in 1-3 days.
+   - Ask me how granular to make it, then draft.
+   ```
+2. Review every feature — can it be built in one focused session? If no, ask the agent to split it.
+3. **Define explicit exit criteria** for each phase. Without these, scope creep is guaranteed.
+4. Commit.
+
+---
+
+### 🏚️ 8.5 Reverse-Engineering the Constitution (Existing Projects)
+
+For an existing project, the inputs change but the process is the same.
+
+**The seed prompt:**
+```
+I have an existing codebase that I want to bring under Spec-Driven Development.
+Your job is to reverse-engineer its Constitution from what's already there.
+
+Inputs available:
+- Source code (you have read access to this repo)
+- README.md — high-level project description
+- TODO.md — planned work
+- <any other artifacts: ADRs, old PRDs, issue tracker exports>
+
+Please:
+1. Explore the codebase to understand the architecture. Look at:
+   - project structure, build files, dependency manifests
+   - main entry points
+   - config files (how it's deployed)
+   - test patterns
+2. Read the README, TODO, and any /docs files.
+3. Draft mission.md, tech-stack.md, roadmap.md in /specs/
+4. Flag every inference with [REVERSE-ENGINEERED - please confirm]
+5. Ask me clarifying questions about:
+   - target audience (probably not obvious from code)
+   - success metrics
+   - prioritization of the TODO items
+```
+
+**What happens next:**
+- Agent performs many tool calls (reading files, searching code).
+- Agent drafts all three files with clearly marked inferences.
+- You correct, clarify, and commit.
+- From here, the workflow is **identical** to greenfield.
+
+**Tip:** The richer the existing artifacts (issues, ADRs, old Confluence pages), the richer the conversation. Paste them in.
+
+---
+
+## 9. Feature Specification Workflow
+
+Once the Constitution is committed, you implement features **one at a time** via a three-artifact workflow: **spec → plan → tasks → implement**.
+
+### 🔄 The Feature Loop
+
+```
+Pick next feature from roadmap
+        │
+        ▼
+┌──────────────────────┐
+│ 1. CREATE BRANCH     │   git checkout -b feature/001-user-auth
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ 2. SPECIFY           │   /specify  → spec.md (what + acceptance criteria)
+│    Conversational:   │              + requirements
+│    answer agent's    │              + validation scorecard
+│    questions         │
+└──────────┬───────────┘
+           ▼      🛑 HUMAN REVIEW GATE
+┌──────────────────────┐
+│ 3. CLARIFY           │   Resolve [NEEDS CLARIFICATION] items
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ 4. PLAN              │   /plan → plan.md (architecture, data model)
+│                      │          + research.md if new deps needed
+└──────────┬───────────┘
+           ▼      🛑 HUMAN REVIEW GATE
+┌──────────────────────┐
+│ 5. TASKS             │   /tasks → tasks.md (atomic ordered steps)
+│                      │            [P] = parallelizable
+└──────────┬───────────┘
+           ▼      🛑 HUMAN REVIEW GATE
+┌──────────────────────┐
+│ 6. ANALYZE (optional)│   /analyze — check consistency across artifacts
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ 7. IMPLEMENT         │   Agent executes tasks one by one
+│    You approve each  │   Review each diff, run tests
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ 8. VALIDATE          │   Run validation.md checks
+│                      │   Manual smoke test
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ 9. COMMIT + MERGE    │   Specs go in with the code
+└──────────┬───────────┘
+           ▼
+┌──────────────────────┐
+│ 10. REPLAN           │   Update roadmap, capture lessons
+└──────────────────────┘
+```
+
+### 📄 9.1 `spec.md` — Feature Intent
+
+```markdown
+# Feature: <Name> (F<N.N>)
+
+## User Story
+As a <role>, I want to <action>, so that <benefit>.
+
+## Acceptance Criteria
+- [ ] Given <precondition>, when <action>, then <outcome>
+- [ ] <edge case 1>
+- [ ] <edge case 2>
+
+## Requirements
+- Functional: <list>
+- Non-functional: <perf, security, a11y>
+- Out of scope: <explicitly NOT doing>
+
+## Dependencies
+- Prerequisite features: <F0.2 DB schema>
+- External: <Stripe, SendGrid>
+
+## Validation Scorecard
+- [ ] Unit tests cover every branch
+- [ ] Integration test for happy path + 2 error paths
+- [ ] Manual smoke test steps documented
+- [ ] No regressions in existing tests
+```
+
+### 🏗️ 9.2 `plan.md` — Technical Approach
+
+```markdown
+# Plan: <Feature Name>
+
+## Approach
+<1 paragraph summary of how we'll build it>
+
+## Files to Create
+- `src/features/auth/LoginEndpoint.cs` (or .py)
+- `src/features/auth/AuthService.cs`
+- `tests/features/auth/LoginTests.cs`
+
+## Files to Modify
+- `Program.cs` — register new service
+- `appsettings.json` — add JWT config section
+
+## Data Model Changes
+<any DB schema additions / migrations needed>
+
+## API Contract
+<request/response shapes, status codes>
+
+## Risks & Mitigations
+- Risk: <rate limiting at login endpoint>
+- Mitigation: <add fixed-window rate limiter, 5/min/IP>
+```
+
+### ✅ 9.3 `tasks.md` — Atomic Steps
+
+```markdown
+# Tasks: <Feature Name>
+
+## Setup
+- [ ] T1. Add NuGet package `Microsoft.AspNetCore.Authentication.JwtBearer`
+
+## Data Layer
+- [ ] T2. Add `User` entity in `Domain/User.cs` [P]
+- [ ] T3. Add migration `AddUsersTable`
+
+## Service Layer
+- [ ] T4. Create `IAuthService` interface
+- [ ] T5. Implement `AuthService` with password hashing
+- [ ] T6. Unit tests for `AuthService` (happy path + 3 edge cases)
+
+## API Layer
+- [ ] T7. Add `/auth/login` endpoint
+- [ ] T8. Add `/auth/register` endpoint
+- [ ] T9. Integration tests using `WebApplicationFactory`
+
+## Wiring
+- [ ] T10. Register services in `Program.cs`
+- [ ] T11. Add JWT config to `appsettings.Development.json`
+
+[P] = parallelizable with adjacent [P] tasks
+```
+
+### 🎯 9.4 Golden Rules for the Feature Loop
+
+1. **Never skip the review gates** — 30 seconds of review saves 2 hours of undoing.
+2. **Edit via the agent, not manually** — keeps `spec.md`, `plan.md`, `tasks.md` in sync.
+3. **Commit specs with the code** — they're part of your history, not throwaway scaffolding.
+4. **One feature, one branch** — mirror the SDD feature folder to the git branch.
+5. **Let the agent ask questions** — if it stops asking, you're probably under-specifying.
+6. **[NEEDS CLARIFICATION] is a feature** — the agent flagging uncertainty is exactly what you want.
+
+---
+
+## 10. The Vibe Coding Workflow
 
 ### The 7-Step Loop
 
@@ -302,7 +808,217 @@ When an agent encounters a bug, instruct it to: **record the fix in `LessonsLear
 
 ---
 
-## 7. .NET Use Cases
+## 11. .NET Use Cases
+
+### 🌱 Use Case 0a: SDD for a NEW .NET Project (End-to-End)
+
+**Scenario:** Build `OrderService` — a new .NET 8 Minimal API for an e-commerce order management system.
+
+#### Step 1: Create the repo & install Spec Kit (optional)
+
+```bash
+mkdir OrderService && cd OrderService
+git init
+# Option A: GitHub Spec Kit
+uvx --from git+https://github.com/github/spec-kit.git specify init .
+# Option B: Lightweight — just create the folder
+mkdir -p specs/features
+```
+
+#### Step 2: Kickoff prompt (in Claude Code / Copilot / Cursor)
+
+```
+Act as a senior .NET architect. Help me write the Constitution for a new
+project called OrderService.
+
+Project description:
+OrderService is a REST API for a mid-size e-commerce company to manage
+customer orders: creation, payment, fulfillment, returns. It will replace
+a creaky Node.js service that can't handle our Black Friday load.
+
+Stakeholder inputs:
+- Team: 4 .NET devs, all comfortable with C# 12 and EF Core
+- Infra: Azure (App Service, Azure SQL, Application Insights)
+- NFRs: P95 < 150ms, 99.9% uptime, PCI-DSS scope adjacent (no card storage)
+- Must integrate with: existing ProductCatalog API, Stripe, SendGrid
+
+Please:
+1. Ask me clarifying questions ONE AT A TIME about audience, trade-offs,
+   tech preferences, and MVP priorities.
+2. Organize the roadmap into 3-4 phases, 2-4 features each.
+3. When we're done, create /specs/mission.md, /specs/tech-stack.md,
+   /specs/roadmap.md.
+4. Flag assumptions with [ASSUMPTION].
+```
+
+#### Step 3: Expect ~8-12 questions
+
+Typical questions from the agent:
+- "What tone should `mission.md` take — formal, playful, neutral?"
+- "Is this the single source of truth for orders, or does another system own parts?"
+- "Authentication: who calls this API — internal services only, or external partners?"
+- "Idempotency requirements for order creation?"
+- "Event-driven (Service Bus) or synchronous calls to downstream services?"
+- "Minimal APIs or MVC controllers?"
+- "Dapper or EF Core?"
+- "How granular should the roadmap be — tickets or phases?"
+
+**Answer every one.** Say "deferred" or "leave configurable" when unsure.
+
+#### Step 4: Review the three files
+
+```
+specs/
+├── mission.md     ← product intent, audience, success metrics, non-goals
+├── tech-stack.md  ← .NET 8, Minimal APIs, EF Core + Azure SQL, Serilog → App Insights, ...
+└── roadmap.md     ← Phase 0: scaffold; Phase 1: CRUD orders; Phase 2: payment; ...
+```
+
+Something missing? Tell the agent — **don't edit manually**:
+> "The mission doesn't mention our internal ops team as a secondary audience. Please add them and propagate any related changes to roadmap."
+
+#### Step 5: Commit the Constitution
+
+```bash
+git add specs/
+git commit -m "chore: establish project constitution (mission, tech-stack, roadmap)"
+```
+
+#### Step 6: Implement Feature F1.1
+
+Open a **fresh chat session** (prevents context bloat). Use the feature spec prompt:
+
+```
+We're implementing feature F1.1 from /specs/roadmap.md:
+"Create an order (POST /orders) with line items, returning 201 + order id."
+
+Please:
+1. Read /specs/mission.md, /specs/tech-stack.md, /specs/roadmap.md first.
+2. Create a feature branch: feature/001-create-order
+3. Draft /specs/features/001-create-order/spec.md with user story,
+   acceptance criteria, requirements, validation scorecard.
+4. Ask me about anything ambiguous. Use [NEEDS CLARIFICATION] markers.
+```
+
+#### Step 7: Plan → Tasks → Implement
+
+After you approve `spec.md`:
+```
+Now draft plan.md — files to create/modify, data model changes, API contract,
+risks. Keep it concise but specific.
+```
+
+After you approve `plan.md`:
+```
+Now draft tasks.md — atomic, ordered steps. Mark parallelizable tasks with [P].
+Tests before implementation where it makes sense.
+```
+
+After you approve `tasks.md`:
+```
+Implement the tasks in order. Stop and show me the diff after each task.
+I'll approve or ask for changes before you proceed.
+```
+
+#### Step 8: Validate & commit
+
+```bash
+dotnet test
+dotnet format --verify-no-changes
+git add .
+git commit -m "feat(orders): F1.1 create order endpoint
+
+See specs/features/001-create-order/ for full spec, plan, and tasks."
+git checkout main && git merge feature/001-create-order
+```
+
+#### Step 9: Replan & repeat
+
+Ask the agent:
+> "Update `roadmap.md` — mark F1.1 complete, note any lessons learned for future features."
+
+Then pick F1.2 and repeat from Step 6.
+
+---
+
+### 🏚️ Use Case 0b: SDD for an EXISTING .NET Project (Legacy/Brownfield)
+
+**Scenario:** You inherit `LegacyERP` — a 4-year-old .NET Framework 4.8 Web API with 80k LOC, patchy docs, and a `TODO.md` full of open work.
+
+#### Step 1: Reverse-engineer the Constitution
+
+In a fresh Claude Code / Copilot session at the repo root:
+
+```
+I've just inherited this .NET codebase. I want to bring it under
+Spec-Driven Development by reverse-engineering its Constitution.
+
+Inputs available:
+- The full source tree (you have read access)
+- README.md — high-level overview
+- TODO.md — open work I'm expected to tackle
+- /docs/ — some old architecture notes (incomplete)
+
+Please:
+1. Explore the codebase:
+   - Read .csproj / Directory.Build.props for framework versions + packages
+   - Map the solution structure (projects, their references)
+   - Identify main entry points (Global.asax, Startup.cs, Program.cs)
+   - Scan /Controllers, /Services, /Repositories to infer architecture
+   - Read web.config / appsettings.json for deployment hints
+   - Note test framework + coverage patterns
+2. Read README.md, TODO.md, and /docs/*.md
+3. Draft these files in /specs/:
+   - mission.md  — inferred product intent (flag guesses)
+   - tech-stack.md — what IS, not what SHOULD BE
+   - roadmap.md — phase the TODO items into logical groups
+4. Mark EVERY inference with [REVERSE-ENGINEERED - confirm]
+5. Ask me:
+   - Who are the actual users?
+   - What are the real pain points the TODO is trying to fix?
+   - Are there non-functional requirements not visible in code?
+```
+
+#### Step 2: Expect many tool calls
+
+The agent will do 20-50 read/search operations across the codebase. Let it run. It's building a mental model you never had to manually compile.
+
+#### Step 3: Review & correct drafts
+
+The agent might say:
+> "[REVERSE-ENGINEERED - confirm] The test coverage in /tests/LegacyERP.IntegrationTests looks thin (32 tests for 80k LOC). Is raising coverage a goal?"
+
+**This is gold.** It's surfacing the invisible debt. Add it to the roadmap.
+
+#### Step 4: First modernization feature
+
+Once the Constitution is committed, pick the smallest TODO item:
+
+```
+Next feature from roadmap: F1.1 "Migrate /api/customers endpoints from
+EF6 to EF Core 8"
+
+Please:
+1. Read /specs/constitution files again.
+2. Read the EXISTING /Controllers/CustomersController.cs and /Repositories/CustomerRepository.cs.
+3. Draft spec.md, plan.md, tasks.md in /specs/features/001-ef-core-migration/
+4. Specifically identify:
+   - What can stay API-compatible (contract tests?)
+   - What will break (EF6 lazy loading → EF Core explicit loading)
+   - Migration order (parallel implementations? feature flag?)
+```
+
+#### Step 5: Same loop as greenfield
+
+Spec → Plan → Tasks → Implement, with review gates at each step.
+
+**Legacy-specific tips:**
+- Use **contract tests** as regression insurance — have the agent capture current behavior as tests *before* refactoring.
+- Feature flag risky migrations to enable side-by-side comparison.
+- Update `LessonsLearned.md` aggressively — legacy projects have the richest lessons.
+- Don't try to modernize everything — the Constitution helps you pick battles.
+
+---
 
 ### Use Case 1: Scaffolding a Web API
 
@@ -404,7 +1120,7 @@ Propose 3 optimizations ranked by impact vs effort.
 
 ---
 
-## 8. Python Use Cases
+## 12. Python Use Cases
 
 ### Use Case 1: FastAPI Microservice
 
@@ -509,7 +1225,7 @@ Build an async scraper using httpx + asyncio + BeautifulSoup:
 
 ---
 
-## 9. Prompt Engineering Playbook
+## 13. Prompt Engineering Playbook
 
 ### 🎯 Anatomy of a Great Coding Prompt
 
@@ -577,7 +1293,7 @@ Level 4 (great):   Level 3 + "Follow the patterns in users/controller.py.
 
 ---
 
-## 10. Pattern Drift & Context Collapse
+## 14. Pattern Drift & Context Collapse
 
 These are the **two most-reported failure modes** in 2026 vibe coding. Knowing them saves weeks of debugging.
 
@@ -636,7 +1352,7 @@ The takeaway: **the methodology works — it just needs guardrails.**
 
 ---
 
-## 11. Anti-Patterns to Avoid
+## 15. Anti-Patterns to Avoid
 
 ### ❌ The "Trust Fall"
 Accepting code without reading it. Always review — especially for:
@@ -675,7 +1391,7 @@ Setting your agent to auto-approve all changes in production code. Keep **Plan M
 
 ---
 
-## 12. Best Practices & Governance
+## 16. Best Practices & Governance
 
 ### ✅ For Individuals
 
@@ -708,7 +1424,7 @@ Setting your agent to auto-approve all changes in production code. Keep **Plan M
 
 ---
 
-## 13. Hands-On Demo Script
+## 17. Hands-On Demo Script
 
 ### 🐍 Python Demo (15 min)
 
@@ -778,24 +1494,26 @@ Produce a GitHub Actions workflow: restore, build, test, publish on main.
 
 ---
 
-## 14. Key Takeaways
+## 18. Key Takeaways
 
-### 🎯 The 7 Rules of Structured Vibe Coding (2026 Edition)
+### 🎯 The 7 Rules of Spec-Driven Vibe Coding (2026 Edition)
 
-1. **You are the architect, not the scribe.**
-2. **Context is king** — `CLAUDE.md`/`AGENTS.md` + specs + examples.
-3. **Never start from a blank canvas** — use a boilerplate, existing project, or scaffold first.
-4. **Describe the symptom, not the fix** when debugging.
-5. **Small chunks** — 30-60 min tasks, not full features in one prompt.
-6. **Verify, don't trust** — run it, test it, read it.
-7. **Never vibe-code what you don't understand** in production paths.
+1. **The spec is the source of truth — code is the last-mile output.**
+2. **Constitution before code:** mission, tech-stack, roadmap — always.
+3. **Never start from a blank canvas** — scaffold or reverse-engineer first.
+4. **Three review gates are non-negotiable:** spec, plan, tasks.
+5. **Describe the symptom, not the fix** when debugging.
+6. **Small chunks** — 30-60 min atomic tasks, not full features in one prompt.
+7. **Edit artifacts via the agent** — keeps spec, plan, tasks in sync.
 
 ### ✈️ Pre-Flight Checklist: Starting a New Vibe-Coded Project
 
 Before writing your first real prompt:
 
-- [ ] `CLAUDE.md` / `AGENTS.md` committed with stack, conventions, pitfalls
-- [ ] `/specs` folder with at least one `what-*.md` and one `how-security.md`
+- [ ] `/specs/mission.md` committed (what + audience + non-goals)
+- [ ] `/specs/tech-stack.md` committed (languages, frameworks, NFRs)
+- [ ] `/specs/roadmap.md` committed (phased features with exit criteria)
+- [ ] `CLAUDE.md` / `AGENTS.md` pointing the agent at `/specs/`
 - [ ] Linter + formatter configured (`ruff`/`mypy` for Python, `dotnet format` for .NET)
 - [ ] Test framework set up and runnable (`pytest` / `dotnet test`)
 - [ ] CI pipeline that runs tests + lint on every push
@@ -811,32 +1529,44 @@ Week 2:  "Why does it keep hallucinating?"
 Week 4:  "Better prompts → better code."
 Week 8:  "I'm shipping 3× more."
 Week 12: "My CLAUDE.md is my most valuable file."
+Week 16: "I started writing specs first — everything changed."
 Week 24: "I know exactly when NOT to use it."
-Week 52: "Specs are my real deliverable; code is just output."
+Week 52: "Specs ARE my real deliverable; code is just output."
 ```
 
 ### 📚 Recommended Next Steps
 
 - ✅ Install Claude Code, Cursor, or Copilot today
-- ✅ Create a `CLAUDE.md` for one existing project this week
-- ✅ Pick one boring task and vibe-code it end-to-end with the structured workflow
+- ✅ Install **GitHub Spec Kit** (`uvx --from git+https://github.com/github/spec-kit.git specify init <project>`)
+- ✅ Pick one existing project and **reverse-engineer its Constitution** this week
+- ✅ Pick one new project and **start with the Constitution** before any code
 - ✅ Keep a `prompts.md` and `LessonsLearned.md` in your repo
-- ✅ Do a team retro: "What did AI help with? What did it break?"
-- ✅ Share prompt recipes and context files across your team
+- ✅ Do a team retro: "Where did our specs help? Where did they fall short?"
+- ✅ Share Constitution templates and prompt recipes across your team
 
 ---
 
 ## 🙌 Q & A
 
-> *"The best developers of 2026 aren't those who type fastest — they're those who think clearest and prompt sharpest."*
+> *"The best developers of 2026 aren't those who type fastest — they're those who think clearest, spec sharpest, and review hardest."*
 
 ### 📖 Further Reading
 
-- **Andrej Karpathy's original "vibe coding" tweet** (Feb 2025)
+**Spec-Driven Development:**
+- **GitHub Spec Kit** — https://github.com/github/spec-kit
+- **GitHub Blog: "Spec-driven development with AI"** — https://github.blog/ai-and-ml/generative-ai/spec-driven-development-with-ai-get-started-with-a-new-open-source-toolkit/
+- **Microsoft Developer: "Diving Into Spec-Driven Development With GitHub Spec Kit"**
+- **DeepLearning.AI course: "Spec-Driven Development with Coding Agents"** (with JetBrains)
 - **Sean Grove — "Specs are the New Code"** (AI Engineer 2025)
+- **Martin Fowler — "Understanding Spec-Driven Development"**
+
+**Vibe Coding Foundations:**
+- **Andrej Karpathy's original "vibe coding" tweet** (Feb 2025)
 - **Addy Osmani — "My LLM coding workflow going into 2026"** (Medium)
 - **Martin Fowler — "Context Engineering for Coding Agents"** (martinfowler.com)
 - **Red Hat — "Vibes, specs, skills, and agents: The four pillars of AI coding"**
+
+**Tool Documentation:**
 - **Claude Code docs:** https://docs.claude.com/en/docs/claude-code
 - **Anthropic prompting guide:** https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview
 - **Google Cloud — "Vibe Coding Explained"**
