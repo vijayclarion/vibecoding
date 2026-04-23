@@ -220,3 +220,74 @@ Read:
 Strictly validate only T1
 
 ```
+
+
+# Old Project create constitution
+
+I have an existing project and I need you to act as a senior architect to help me write its Constitution — three files: mission.md, tech-stack.md, and roadmap.md.
+
+This is NOT a greenfield project. The codebase already exists. Your job is to document what IS, identify what is MISSING or INCONSISTENT, and define where it needs to GO.
+
+## What I will give you
+
+Paste one or more of the following (give me whatever you have):
+- README or existing docs
+- Folder/file structure (paste `tree` output or key folders)
+- Key config files (csproj, package.json, appsettings.json, docker-compose.yml)
+- Any existing spec, ADR, or architecture notes
+- A short description of what the project actually does today
+
+## Your process
+
+**Step 1 — Audit (do this silently before asking anything)**
+Read everything I gave you and produce a short audit summary:
+- What the project appears to be (1-2 sentences)
+- Tech stack you can confirm from evidence
+- Features that appear to be built
+- Obvious gaps, inconsistencies, or missing docs
+- Mark anything you are inferring (not evidenced) with [INFERRED]
+
+**Step 2 — Ask clarifying questions ONE AT A TIME**
+Only ask about things you could NOT determine from the materials. Focus on:
+- Mission gaps: who is the real target user, what is the #1 success metric?
+- Stack gaps: anything ambiguous (e.g. auth provider, deployment target, DB host)
+- History gaps: what is already shipped vs still in progress?
+- Debt gaps: known pain points, things built the wrong way that need fixing
+- Direction gaps: what is the next 90-day goal?
+
+Do not ask about things already evident in the materials.
+Do not ask multiple questions at once.
+
+**Step 3 — Generate the three files**
+After the conversation, create:
+
+/specs/mission.md
+  - Project name and one-line mission statement
+  - Problem being solved (2-3 sentences)
+  - Target users (primary and secondary)
+  - Success metrics (3-5 measurable outcomes)
+  - Out of scope (explicit list)
+  - [ASSUMPTION] tags on anything not confirmed by me
+
+/specs/tech-stack.md
+  - Confirmed stack (languages, frameworks, DBs, cloud, CI/CD)
+  - Architecture pattern (monolith / layered / clean / microservices)
+  - Key third-party integrations
+  - Known tech debt (as a numbered list)
+  - Constraints (things we cannot change)
+  - Recommended changes (things we SHOULD change, with brief rationale)
+  - [INFERRED] tags on anything derived from code, not stated by me
+
+/specs/roadmap.md
+  - Phase 0 — Already shipped (what exists and works today)
+  - Phase 1 — In progress (what is partially built or broken)
+  - Phase 2 — Next 30-60 days (highest priority gaps)
+  - Phase 3 — Next 60-90 days (next layer of features)
+  - Each phase: max 4 items, each with a one-line definition of done
+  - [DEBT] tag on any item that is fixing existing problems vs adding new value
+
+## Rules
+- Never invent features that are not evidenced or discussed
+- Flag every assumption — wrong assumptions in a constitution corrupt every spec downstream
+- If materials are contradictory (e.g. README says X but package.json says Y), flag the conflict, ask me to resolve it, and do not guess
+- Keep all three files under 2 pages each — constitution is a compass, not an encyclopedia
